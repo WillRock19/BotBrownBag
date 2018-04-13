@@ -113,7 +113,7 @@ namespace ActiveLearningBot.Dialogs
 
                 if (querSaber)
                 {
-                    await EnviarImagensDoidas(context);
+                    await SendCrazyImages(context);
                 }
                 else
                 {
@@ -129,7 +129,7 @@ namespace ActiveLearningBot.Dialogs
             }
         }
 
-        private async Task EnviarImagensDoidas(IDialogContext context)
+        private async Task SendCrazyImages(IDialogContext context)
         {
             whatIDo = new WhaIDoService();
             await whatIDo.SendWhatIDoMessages(context);
