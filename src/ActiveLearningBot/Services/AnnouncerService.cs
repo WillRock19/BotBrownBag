@@ -11,33 +11,34 @@ namespace ActiveLearningBot.Services
         private string botImageUrl;
         private string botImageUrlHappy;
         private string myNameIs;
+        public static IMessageActivity Argument { get; set; }
 
         public AnnouncerService()
         {
-            myNameIs = "Hey, eu sou Bot Paul!";
+            myNameIs = "Hey, eu sou Paul Bot!";
             botImageUrl = ConfigurationManager.AppSettings["BotImageUrl"];
             botImageUrlHappy = ConfigurationManager.AppSettings["BotImageUrlCongrats"];
 
         }
 
-        public HeroCard GenerateIntroduction() => new HeroCard()
+        public HeroCard GenerateGoodbye() => new HeroCard()
         {
-            Title = myNameIs,
-            Subtitle = "Já apontou suas horas hoje? 🕵",
-            Text = "Ta esperando o que? Vamos apontar as horas, vamos la já que você não aponta de maneira nenhuma fui criado para te ajudar a apontar essas benditas horas!!!!",
+            Title = "TO DE OLHO",
+            Subtitle = "Continue apontando suas horas 🕵",
+            Text = "Quando vc estiver na cozinha, eu estarei lá.... Quando vc estiver no metrô, eu estarei lá...... Quando vc estiver no cliente, eu estarei lá",
             Images = new List<CardImage>()
             {
-                new CardImage(botImageUrl, "eu sou Bot Paul")
+                new CardImage(botImageUrl, "Bot Paul")
             }
         };
 
         public HeroCard GenerateCongratulations() => new HeroCard()
         {
-            Title = "Aeee PARABÉNS",
-            Text = "Horas apontadas, agora estou FELIZ hehe",
+            Title = "Aeee PARABÉNS!!!",
+            Text = "HORAS APONTADAS, AGORA ESTOU FELIZ hehe",
             Images = new List<CardImage>()
             {
-                new CardImage(botImageUrlHappy, "eu sou Bot Paul")
+                new CardImage(botImageUrlHappy, "eu sou Paul Bot")
             },
         };
 

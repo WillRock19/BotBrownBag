@@ -87,7 +87,9 @@ namespace ActiveLearningBot.Services
 
         private HeroCard GenerateHereIAm() => new HeroCard()
         {
-            Title = "E aí... vamos apontar umas benditas horas???!!!",
+            Title = " eu sou BOT PAUL",
+            Subtitle = "Já apontou suas horas hoje? 🕵",
+            Text = "Ta esperando o que? Vamos apontar as horas, vamos la já que você não aponta de maneira nenhuma fui criado para te ajudar a apontar essas benditas horas!!!!",
             Images = new List<CardImage>()
             {
                 new CardImage(HereIAmKnock)

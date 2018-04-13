@@ -20,7 +20,10 @@ namespace ActiveLearningBot
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
             if (activity.Type == ActivityTypes.Message)
+            {
+                AnnouncerService.Argument = activity;
                 await Conversation.SendAsync(activity, () => new Dialogs.MainDialog());
+            }
             else
                 HandleSystemMessage(activity);
 
@@ -57,23 +60,6 @@ namespace ActiveLearningBot
 
             return null;
         }
-        private void IntroductBotForNewUsers(Activity activity)
-        {
-            if (activity.MembersAdded != null && activity.MembersAdded.Any())
-            {
-                var botId = activity.Recipient.Id;
-                var test = activity.MembersAdded.Select(m => m).Where(m => m.Id != botId).ToList();
-
-                if (activity.MembersAdded.Any(m => m.Id != botId))
-                {
-                    var connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-                    var announcer = new AnnouncerService();
-                    var reply = activity.CreateReply();
-
-                    reply.Attachments.Add(announcer.GenerateIntroduction().ToAttachment());
-                    connector.Conversations.ReplyToActivityAsync(reply);
-                }
-            }
-        }
+        
     }
 }

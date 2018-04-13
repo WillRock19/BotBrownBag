@@ -1,7 +1,9 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
+using Microsoft.Bot.Connector;
 using System;
 using System.Configuration;
+using System.Threading.Tasks;
 
 namespace ActiveLearningBot.Dialogs
 {

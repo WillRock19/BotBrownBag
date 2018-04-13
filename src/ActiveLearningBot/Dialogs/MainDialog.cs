@@ -1,11 +1,13 @@
 ﻿using ActiveLearningBot.Form;
 using ActiveLearningBot.Services;
+using Microsoft.Bot.Builder.CognitiveServices.QnAMaker;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Threading.Tasks;
 using System.Web.Hosting;
 
@@ -14,6 +16,9 @@ namespace ActiveLearningBot.Dialogs
     [Serializable]
     public class MainDialog : BaseLuisDialog<object>
     {
+        string qnaSubscriptionKey = ConfigurationManager.AppSettings["QnaSubscriptionKey"];
+        string qnaKnowledgebaseId = ConfigurationManager.AppSettings["QnaKnowledgebaseId"];
+
         [NonSerialized]
         private LuisLearnService luisLearnService;
 
@@ -34,16 +39,30 @@ namespace ActiveLearningBot.Dialogs
         {
             LearnLatestMessageSended(result.TopScoringIntent.Intent, context);
 
-            await context.PostAsync($"Bem-vindo(a) a Lambda3! Sou o seu assistente virtual, ja apontou suas horas hoje? 🕵");
-            context.Wait(MessageReceived);
+            var qnaService = new QnAMakerService(new QnAMakerAttribute(qnaSubscriptionKey, qnaKnowledgebaseId, "Buguei aqui, pera!  ¯＼(º_o)/¯"));
+            var qnaMaker = new QnAMakerDialog(qnaService);
+            await qnaMaker.MessageReceivedAsync(context, Awaitable.FromItem(AnnouncerService.Argument));
+        }
 
-            await SendMessageCongratulations(context);
+        [LuisIntent("Adeus")]
+        public async Task Adeus(IDialogContext context, LuisResult result)
+        {
+            LearnLatestMessageSended(result.TopScoringIntent.Intent, context);
+
+            announcerService = new AnnouncerService();
+            var card = announcerService.GenerateGoodbye();
+            var message = context.MakeMessage();
+            message.Attachments.Add(card.ToAttachment());
+
+            await context.PostAsync(message);
         }
 
 
         [LuisIntent("Requisitar.Informacoes.Bot")]
         public async Task UsuarioQuerSaberOQueBotFaz(IDialogContext context, LuisResult result)
         {
+            LearnLatestMessageSended(result.TopScoringIntent.Intent, context);
+
             PromptDialog.Confirm(
                 context: context,
                 resume: ChecarSeUsuarioQuerSaber,
@@ -74,24 +93,24 @@ namespace ActiveLearningBot.Dialogs
         {
             return new List<CardAction>
             {
-                //new CardAction
-                //{
-                //    Title = "Desejo apontar as horas",
-                //    Type = ActionTypes.ImBack,
-                //    Value = "Desejo apontar as horas"
-                //},
                 new CardAction
                 {
-                    Title = "Oi",
+                    Title = "Calma Fera, só to te cumprimentando",
                     Type = ActionTypes.ImBack,
                     Value = "Oi"
                 },
                 new CardAction
                 {
-                    Title = "Nenhuma",
+                    Title = "Quero saber o que tu faz",
                     Type = ActionTypes.ImBack,
-                    Value = "Nenhuma"
-                }
+                    Value = "Oq vc faz?"
+                },
+                new CardAction
+                {
+                    Title = "Só te dei tchau parça!",
+                    Type = ActionTypes.ImBack,
+                    Value = "tchau"
+                },
             };
         }
 
@@ -137,7 +156,7 @@ namespace ActiveLearningBot.Dialogs
             PromptDialog.Confirm(
                 context: context,
                 resume: ChecarSeUsuarioQuerApontarHoras,
-                prompt: "",
+                prompt: "Bora?",
                 attempts: 1,
                 promptStyle: PromptStyle.Auto
             );
