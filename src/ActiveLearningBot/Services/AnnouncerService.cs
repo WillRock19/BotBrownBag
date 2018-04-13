@@ -31,7 +31,7 @@ namespace ActiveLearningBot.Services
             }
         };
 
-        public HeroCard SendMessageCongratulations() => new HeroCard()
+        public HeroCard GenerateCongratulations() => new HeroCard()
         {
             Title = "Aeee PARABÉNS",
             Text = "Horas apontadas, agora estou FELIZ hehe",
