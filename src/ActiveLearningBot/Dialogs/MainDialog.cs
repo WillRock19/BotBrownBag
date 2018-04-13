@@ -137,7 +137,7 @@ namespace ActiveLearningBot.Dialogs
             PromptDialog.Confirm(
                 context: context,
                 resume: ChecarSeUsuarioQuerApontarHoras,
-                prompt: "Vamos começar...?",
+                prompt: "",
                 attempts: 1,
                 promptStyle: PromptStyle.Auto
             );
