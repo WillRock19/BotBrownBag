@@ -16,9 +16,8 @@ namespace ActiveLearningBot.Services
         public AnnouncerService()
         {
             myNameIs = "Hey, eu sou Paul Bot!";
-            botImageUrl = ConfigurationManager.AppSettings["BotImageUrl"];
-            botImageUrlHappy = ConfigurationManager.AppSettings["BotImageUrlCongrats"];
-
+            botImageUrl = $"{AppDomain.CurrentDomain.BaseDirectory}{ConfigurationManager.AppSettings["BotImageUrl"]}";
+            botImageUrlHappy = $"{AppDomain.CurrentDomain.BaseDirectory}{ConfigurationManager.AppSettings["BotImageUrlCongrats"]}";
         }
 
         public HeroCard GenerateGoodbye() => new HeroCard()

@@ -1,7 +1,9 @@
 ﻿using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace ActiveLearningBot.Services
@@ -15,10 +17,9 @@ namespace ActiveLearningBot.Services
 
         public WhaIDoService()
         {
-            FirstKnock = ConfigurationManager.AppSettings["FirstKnockUrl"];
-            SecondKnock = ConfigurationManager.AppSettings["SecondKnockUrl"];
-            HereIAmKnock = ConfigurationManager.AppSettings["HereIAmKnockUrl"];
-
+            FirstKnock = $"{AppDomain.CurrentDomain.BaseDirectory}{ConfigurationManager.AppSettings["FirstKnockUrl"]}";
+            SecondKnock = $"{AppDomain.CurrentDomain.BaseDirectory}{ConfigurationManager.AppSettings["SecondKnockUrl"]}";
+            HereIAmKnock = $"{AppDomain.CurrentDomain.BaseDirectory}{ConfigurationManager.AppSettings["HereIAmKnockUrl"]}";
         }
 
         public async Task SendWhatIDoMessages(IDialogContext context)

@@ -153,13 +153,16 @@ namespace ActiveLearningBot.Dialogs
             whatIDo = new WhaIDoService();
             await whatIDo.SendWhatIDoMessages(context);
 
-            PromptDialog.Confirm(
-                context: context,
-                resume: ChecarSeUsuarioQuerApontarHoras,
-                prompt: "Bora?",
-                attempts: 1,
-                promptStyle: PromptStyle.Auto
-            );
+            await Task.Delay(2000).ContinueWith(t =>
+            {
+                PromptDialog.Confirm(
+                    context: context,
+                    resume: ChecarSeUsuarioQuerApontarHoras,
+                    prompt: "Bora?",
+                    attempts: 1,
+                    promptStyle: PromptStyle.Auto
+                );
+            });
         }
 
         private async Task ChecarSeUsuarioQuerApontarHoras(IDialogContext context, IAwaitable<bool> result)
