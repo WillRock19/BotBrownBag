@@ -29,6 +29,30 @@ namespace ActiveLearningBot.Dialogs
             await NotUnderstandMessage(context, result);
         }
 
+        [LuisIntent("Saudacao")]
+        public async Task Saudacao(IDialogContext context, LuisResult result)
+        {
+            LearnLatestMessageSended(result.TopScoringIntent.Intent, context);
+
+            await context.PostAsync($"Bem-vindo(a) a Lambda3! Sou o seu assistente virtual, ja apontou suas horas hoje? 🕵");
+            context.Wait(MessageReceived);
+
+            await SendMessageCongratulations(context);
+        }
+
+
+        [LuisIntent("Requisitar.Informacoes.Bot")]
+        public async Task UsuarioQuerSaberOQueBotFaz(IDialogContext context, LuisResult result)
+        {
+            PromptDialog.Confirm(
+                context: context,
+                resume: ChecarSeUsuarioQuerSaber,
+                prompt: "Quer mesmo saber...?",
+                attempts: 0,
+                promptStyle: PromptStyle.Auto
+            );
+        }
+
         private static async Task NotUnderstandMessage(IDialogContext context, LuisResult result)
         {
             context.UserData.SetValue("MessageId", result.Query);
@@ -71,17 +95,6 @@ namespace ActiveLearningBot.Dialogs
             };
         }
 
-        [LuisIntent("Saudacao")]
-        public async Task Saudacao(IDialogContext context, LuisResult result)
-        {
-            LearnLatestMessageSended(result.TopScoringIntent.Intent, context);
-
-            await context.PostAsync($"Bem-vindo(a) a Lambda3! Sou o seu assistente virtual, ja apontou suas horas hoje? 🕵");
-            context.Wait(MessageReceived);
-
-            await SendMessageCongratulations(context);
-        }
-
         private async Task SendMessageCongratulations(IDialogContext context)
         {
             announcerService = new AnnouncerService();
@@ -91,27 +104,6 @@ namespace ActiveLearningBot.Dialogs
             await context.PostAsync(msg);
         }
 
-
-        //[LuisIntent("Requisitar.Ajuda.Bot")]
-        //public async Task ApontamentoHora(IDialogContext context, LuisResult result)
-        //{
-        //    LearnLatestMessageSended(result.TopScoringIntent.Intent, context);
-
-        //    await context.PostAsync($"https://spine.lambda3.com.br/");
-        //    context.Wait(MessageReceived);
-        //}
-
-        [LuisIntent("Requisitar.Informacoes.Bot")]
-        public async Task UsuarioQuerSaberOQueBotFaz(IDialogContext context, LuisResult result)
-        {
-            PromptDialog.Confirm(
-                context: context,
-                resume: ChecarSeUsuarioQuerSaber,
-                prompt: "Quer mesmo saber...?",
-                attempts: 0,
-                promptStyle: PromptStyle.Auto
-            );
-        }
 
         private async Task ChecarSeUsuarioQuerSaber(IDialogContext context, IAwaitable<bool> result)
         {
